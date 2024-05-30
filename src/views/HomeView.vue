@@ -6,9 +6,12 @@
         <Post :post="d" />
       </div>
     </div>
+
     <div v-else class="w-full h-[70vh] flex items-center justify-center">
       <q-spinner-hourglass color="primary" class="w-8 h-8 md:w-14 md:h-14" />
     </div>
+
+    <h3 v-if="!isLoading && posts.length === 0" class="text-2xl font-bold text-center">No posts</h3>
   </main>
 </template>
 

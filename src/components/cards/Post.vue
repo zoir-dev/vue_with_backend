@@ -8,9 +8,9 @@
 
     <q-card-section class="flex flex-col gap-2">
       <h4 class="font-semibold text-xl">{{ post.title }}</h4>
-      <p class="text-gray-800 text-base dark:text-gray-400">{{ post.body }}</p>
+      <p class="text-gray-800 text-base dark:text-gray-400 m-0">{{ post.body }}</p>
     </q-card-section>
-    <q-card-action class="flex gap-4 justify-end p-4 pt-0">
+    <q-card-action class="flex gap-4 justify-end p-4 pt-2" v-if="user.email">
       <q-btn
         push
         glossy
@@ -37,7 +37,8 @@ import { API_URL, http } from '../../utils/http'
 import { Notify } from 'quasar'
 import { usePostsStore } from '@/stores/posts'
 import Modal from '../modal/Modal.vue'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import { useUserStore } from '@/stores/user'
 export default {
   props: {
     post: {
@@ -47,6 +48,9 @@ export default {
   },
   setup() {
     const postsStore = usePostsStore()
+    const userStore = useUserStore()
+
+    const user = computed(() => userStore.user)
 
     const { mutate, isPending } = useMutation({
       mutationKey: ['delete-post'],
@@ -68,7 +72,7 @@ export default {
           group: false,
           position: 'bottom-right',
           color: 'red',
-          message: err.message
+          message: err.response.data.message || err.message
         })
       }
     })
@@ -76,7 +80,8 @@ export default {
       API_URL,
       mutate,
       isPending,
-      open: ref(false)
+      open: ref(false),
+      user
     }
   },
   components: {

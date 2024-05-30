@@ -5,10 +5,10 @@
       <q-form @submit="onSubmit" @reset="onReset" class="w-full">
         <q-input
           v-if="!data"
+          v-model="img"
           type="file"
           ref="fileInput"
           accept=".png, .jpg, .jpeg"
-          v-model="img"
           change="onFileChange"
           :rules="[(val) => (val && val.length > 0) || 'Select Image']"
           :disable="isPending"
@@ -80,10 +80,10 @@ export default {
         if (props.data) {
           const { data } = await http.put(`/post/${props.data._id}`, formData)
           postsStore.updatePost(data)
-          props.Close()
           return data
         } else {
           const { data } = await http.post('/post', formData)
+          postsStore.addPost(data)
           return data
         }
       },
@@ -94,13 +94,14 @@ export default {
           color: 'primary',
           message: props.data ? 'Post updated successfully' : 'Post created successfully'
         })
+        props.Close()
       },
       onError: (err) => {
         Notify.create({
           group: false,
           position: 'bottom-right',
           color: 'red',
-          message: err.message
+          message: err.response.data.message || err.message
         })
       }
     })
@@ -111,6 +112,9 @@ export default {
       img,
       mutate,
       isPending,
+      onFileChange(event) {
+        img.value = event.target.files[0]
+      },
       onReset() {
         if (!props.data) {
           title.value = null
@@ -119,17 +123,25 @@ export default {
         }
       },
       onSubmit() {
-        const formData = new FormData()
-        !props.data && formData.append('img', img)
-        formData.append('title', title.value)
-        formData.append('body', body.value)
-        mutate(formData)
+        if (
+          props.data ? title.value === props.data.title && body.value === props.data.body : false
+        ) {
+          Notify.create({
+            group: false,
+            position: 'bottom-right',
+            color: 'info',
+            message: 'Add changes to edit!'
+          })
+        } else {
+          const formData = new FormData()
+          if (!props.data && img.value) {
+            formData.append('img', ...img.value)
+          }
+          formData.append('title', title.value)
+          formData.append('body', body.value)
+          mutate(formData)
+        }
       }
-    }
-  },
-  methods: {
-    onFileChange(e) {
-      this.img = e.target.files && e.target.files[0]
     }
   }
 }

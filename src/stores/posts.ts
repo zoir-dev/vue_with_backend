@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, type Ref } from 'vue'
 
 export const usePostsStore = defineStore('posts', () => {
-  const posts = ref([])
+  const posts: Ref<any[]> = ref([])
 
   const setPosts = (data: any) => {
     posts.value = data
@@ -16,5 +16,9 @@ export const usePostsStore = defineStore('posts', () => {
     posts.value = posts.value.map((p: any) => (p._id === data._id ? data : p))
   }
 
-  return { posts, setPosts, deletePost, updatePost }
+  const addPost = (data: any) => {
+    posts.value = [...posts.value, data]
+  }
+
+  return { posts, setPosts, deletePost, updatePost, addPost }
 })
