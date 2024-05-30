@@ -1,4 +1,5 @@
-<template lang="">
+<!-- eslint-disable vue/multi-word-component-names -->
+<template>
   <q-card class="dark:bg-gray-900">
     <q-img :src="API_URL + post.img" :alt="post.title" class="w-full aspect-[4/3] object-cover">
       <template v-slot:loading>
@@ -72,7 +73,7 @@ export default {
           group: false,
           position: 'bottom-right',
           color: 'red',
-          message: err.response.data.message || err.message
+          message: err?.response?.data?.message || err.message
         })
       }
     })

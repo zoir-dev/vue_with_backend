@@ -1,4 +1,5 @@
-<template lang="">
+<!-- eslint-disable vue/multi-word-component-names -->
+<template>
   <q-dialog backdrop-filter="blur(10px)" persistent>
     <div class="p-5 bg-gray-50 dark:!bg-gray-900 !max-w-sm w-full">
       <h2 class="text-xl font-bold pb-6">{{ data ? 'Edit' : 'Create' }} Post</h2>

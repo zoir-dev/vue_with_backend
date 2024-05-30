@@ -15,7 +15,7 @@
   </main>
 </template>
 
-<script lang="ts">
+<script>
 import { http } from '@/utils/http'
 import { useQuery } from '@tanstack/vue-query'
 import Post from '@/components/cards/Post.vue'

@@ -56,7 +56,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { http } from '@/utils/http'
 import { useMutation } from '@tanstack/vue-query'
 import { Notify } from 'quasar'
@@ -81,14 +81,14 @@ export default {
 
     const router = useRouter()
 
-    const emailRule = (val) => {
+    const emailRule = (val: string) => {
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
       return emailPattern.test(val) || 'Please type a valid email'
     }
 
     const { mutate, isPending } = useMutation({
       mutationKey: [props.login ? 'login-user' : 'create-user'],
-      mutationFn: async (formData) => {
+      mutationFn: async (formData: any) => {
         const { data } = await http.post(props.login ? 'auth/login' : 'auth/register', formData)
         localStorage.setItem('accessToken', data.accessToken)
         userStore.setUser(data.user)
@@ -103,12 +103,12 @@ export default {
         })
         router.push('/')
       },
-      onError: (err) => {
+      onError: (err: any) => {
         Notify.create({
           group: false,
           position: 'bottom-right',
           color: 'red',
-          message: err.response.data.message || err.message
+          message: err?.response?.data?.message || err?.message
         })
       }
     })

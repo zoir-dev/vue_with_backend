@@ -2,7 +2,7 @@
 <template>
   <Auth />
 </template>
-<script>
+<script lang="ts">
 import Auth from '../components/auth/Auth.vue'
 export default {
   components: {
